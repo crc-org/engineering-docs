@@ -10,3 +10,5 @@ default-theme = "light"
 preferred-dark-theme = "light"
 
 [preprocessor.callouts]
+
+[preprocessor.kroki]

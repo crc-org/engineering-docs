@@ -1,4 +1,4 @@
-FROM quay.io/crc-org/mdbook:0.4.42
+FROM quay.io/crc-org/mdbook:0.4.43
 
 RUN dnf install -y git-core \
     && dnf clean all \

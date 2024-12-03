@@ -1,10 +1,11 @@
 FROM registry.fedoraproject.org/fedora:40 AS builder
 
 
-RUN dnf install -y cargo \
+RUN dnf install -y cargo openssl-devel \
     && cargo install mdbook \
     && cargo install mdbook-callouts \
-    && cargo install mdbook-mermaid
+    && cargo install mdbook-mermaid \
+    && cargo install mdbook-kroki-preprocessor
 
 
 FROM registry.fedoraproject.org/fedora:40 
@@ -12,7 +13,10 @@ FROM registry.fedoraproject.org/fedora:40
 COPY --from=builder /root/.cargo/bin/mdbook /usr/bin
 COPY --from=builder /root/.cargo/bin/mdbook-callouts /usr/bin
 COPY --from=builder /root/.cargo/bin/mdbook-mermaid /usr/bin
+COPY --from=builder /root/.cargo/bin/mdbook-kroki-preprocessor /usr/bin/mdbook-kroki
 
 RUN mkdir -p /workspace
 VOLUME /workspace
 WORKDIR /workspace
+
+ENTRYPOINT ["/usr/bin/mdbook"]
