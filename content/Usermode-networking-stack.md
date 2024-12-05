@@ -69,4 +69,4 @@ On Windows, this is slightly more complicated. Please follow this guide:
 
 ## Technical details
 
-![gvproxy](kroki-excalidraw:./assets/gvproxy.excalidraw)
+[![Click to open](kroki-excalidraw:./assets/gvproxy.excalidraw)](./assets/gvproxy.excalidraw)
