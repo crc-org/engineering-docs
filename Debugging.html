@@ -398,23 +398,23 @@ With this following <code>ssh-config</code>, enter the VM. The IP can be found w
 <pre><code class="language-ssh-config">Host crc
     Hostname 192.168.130.11
     User core
-    IdentityFile ~/.crc/machines/crc/id_rsa
     IdentityFile ~/.crc/machines/crc/id_ecdsa
+    IdentityFile ~/.crc/machines/crc/id_ed25519
     StrictHostKeyChecking no
     UserKnownHostsFile /dev/null
 
 </code></pre>
 <p>If you use vsock network mode, the IP is 127.0.0.1 and the port is 2222.
-On Windows, the relevant SSH keys is in <code>C:\Users\%USERNAME%\.crc\machines\crc\id_ecdsa</code></p>
+On Windows, the relevant SSH keys is in <code>C:\Users\%USERNAME%\.crc\machines\crc\id_ed25519</code></p>
 <p>You can also run directly this command:</p>
 <h4 id="linux"><a class="header" href="#linux">Linux</a></h4>
-<pre><code class="language-bash">$ ssh -i ~/.crc/machines/crc/id_ecdsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null core@192.168.130.11
+<pre><code class="language-bash">$ ssh -i ~/.crc/machines/crc/id_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null core@192.168.130.11
 </code></pre>
 <h4 id="macos"><a class="header" href="#macos">MacOS</a></h4>
-<pre><code class="language-bash">$ ssh -i ~/.crc/machines/crc/id_ecdsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 core@127.0.0.1
+<pre><code class="language-bash">$ ssh -i ~/.crc/machines/crc/id_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 core@127.0.0.1
 </code></pre>
 <h4 id="windows"><a class="header" href="#windows">Windows</a></h4>
-<pre><code class="language-powershell">PS&gt; ssh -i C:\Users\$env:USERNAME\.crc\machines\crc\id_ecdsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 core@127.0.0.1
+<pre><code class="language-powershell">PS&gt; ssh -i C:\Users\$env:USERNAME\.crc\machines\crc\id_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 core@127.0.0.1
 </code></pre>
 <h2 id="checking-the-status-of-the-vm"><a class="header" href="#checking-the-status-of-the-vm">Checking the status of the VM</a></h2>
 <p>First, you can check you have internet connectivity with <code>curl https://quay.io</code>.</p>
