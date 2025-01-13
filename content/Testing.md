@@ -36,7 +36,7 @@ $ make e2e
 Implicitly, all e2e tests for your operating system are executed. If you want to run only tests from one feature file, you have to override `GODOG_OPTS` environment variable. For example:
 
 ```bash
-make e2e GODOG_OPTS="--godog.tags='@basic && @windows'" BUNDLE_LOCATION=<bundle location> PULL_SECRET_FILE=<pull secret path>
+make e2e GODOG_OPTS="--godog.tags='@basic && @windows'" BUNDLE_LOCATION="--bundle-location=<bundle location>" PULL_SECRET_FILE="--pull-secret-file=<pull secret path>"
 ```
 
 Please notice `@basic && @windows`, where `@basic` tag stands for `basic.feature` file and `@windows` tag for e2e tests designed for Windows.
