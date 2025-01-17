@@ -411,7 +411,7 @@ otherwise absolute path to the <code>crc</code> binary should be passed.</li>
 </code></pre>
 <h4 id="how-to-run-only-a-subset-of-all-e2e-tests"><a class="header" href="#how-to-run-only-a-subset-of-all-e2e-tests">How to run only a subset of all e2e tests</a></h4>
 <p>Implicitly, all e2e tests for your operating system are executed. If you want to run only tests from one feature file, you have to override <code>GODOG_OPTS</code> environment variable. For example:</p>
-<pre><code class="language-bash">make e2e GODOG_OPTS="--godog.tags='@basic &amp;&amp; @windows'" BUNDLE_LOCATION=&lt;bundle location&gt; PULL_SECRET_FILE=&lt;pull secret path&gt;
+<pre><code class="language-bash">make e2e GODOG_OPTS="--godog.tags='@basic &amp;&amp; @windows'" BUNDLE_LOCATION="--bundle-location=&lt;bundle location&gt;" PULL_SECRET_FILE="--pull-secret-file=&lt;pull secret path&gt;"
 </code></pre>
 <p>Please notice <code>@basic &amp;&amp; @windows</code>, where <code>@basic</code> tag stands for <code>basic.feature</code> file and <code>@windows</code> tag for e2e tests designed for Windows.</p>
 <h3 id="how-to-test-cert-rotation"><a class="header" href="#how-to-test-cert-rotation">How to test cert rotation</a></h3>
