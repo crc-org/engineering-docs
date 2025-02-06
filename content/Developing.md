@@ -84,3 +84,36 @@ If you need to update mocks use:
 ```bash
 $ make generate_mocks
 ```
+
+## Troubleshooting errors when running unit tests via IDE
+
+When running tests from IDE, you might encounter this error:
+
+```shell
+pkg-config --cflags -- gpgme
+Package gpgme was not found in the pkg-config search path.
+Perhaps you should add the directory containing `gpgme.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'gpgme' found
+pkg-config: exit status 1
+```
+
+In order to resolve this you need to install [gpgme](https://github.com/proglottis/gpgme)
+
+### Installing gpgme on Linux
+
+You need to install `libgpgme-dev` using your Linux distribution's package installer tool (`dnf`/`apt`)
+
+Here is an example for Fedora:
+```shell
+sudo dnf -y install libgpgme-dev
+```
+
+### Installing gpgme on MacOS
+
+You need to install `gpgme` on macOS.
+
+Here is an example using homebrew:
+```shell
+brew install gpgme
+```
