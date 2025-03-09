@@ -449,6 +449,26 @@ out/
 <p>If you need to update mocks use:</p>
 <pre><code class="language-bash">$ make generate_mocks
 </code></pre>
+<h2 id="troubleshooting-errors-when-running-unit-tests-via-ide"><a class="header" href="#troubleshooting-errors-when-running-unit-tests-via-ide">Troubleshooting errors when running unit tests via IDE</a></h2>
+<p>When running tests from IDE, you might encounter this error:</p>
+<pre><code class="language-shell">pkg-config --cflags -- gpgme
+Package gpgme was not found in the pkg-config search path.
+Perhaps you should add the directory containing `gpgme.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'gpgme' found
+pkg-config: exit status 1
+</code></pre>
+<p>In order to resolve this you need to install <a href="https://github.com/proglottis/gpgme">gpgme</a></p>
+<h3 id="installing-gpgme-on-linux"><a class="header" href="#installing-gpgme-on-linux">Installing gpgme on Linux</a></h3>
+<p>You need to install <code>libgpgme-dev</code> using your Linux distribution's package installer tool (<code>dnf</code>/<code>apt</code>)</p>
+<p>Here is an example for Fedora:</p>
+<pre><code class="language-shell">sudo dnf -y install libgpgme-dev
+</code></pre>
+<h3 id="installing-gpgme-on-macos"><a class="header" href="#installing-gpgme-on-macos">Installing gpgme on MacOS</a></h3>
+<p>You need to install <code>gpgme</code> on macOS.</p>
+<p>Here is an example using homebrew:</p>
+<pre><code class="language-shell">brew install gpgme
+</code></pre>
 
                     </main>
 
