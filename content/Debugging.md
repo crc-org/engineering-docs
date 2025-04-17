@@ -12,7 +12,8 @@ With this following `ssh-config`, enter the VM. The IP can be found with `crc ip
 `~/.ssh/config`
 ```ssh-config
 Host crc
-    Hostname 192.168.130.11
+    Hostname 127.0.0.1
+    Port 2222
     User core
     IdentityFile ~/.crc/machines/crc/id_ecdsa
     IdentityFile ~/.crc/machines/crc/id_ed25519
@@ -21,17 +22,13 @@ Host crc
 
 ```
 
-If you use vsock network mode, the IP is 127.0.0.1 and the port is 2222. 
+If you use user network mode, the IP is 127.0.0.1 and the port is 2222.
+If you use system network mode on Linux, the IP is 192.168.130.1 and the port is 22.
 On Windows, the relevant SSH keys is in `C:\Users\%USERNAME%\.crc\machines\crc\id_ed25519`
 
 You can also run directly this command:
 
-#### Linux
-```bash
-$ ssh -i ~/.crc/machines/crc/id_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null core@192.168.130.11
-```
-
-#### MacOS
+#### Linux/macOS
 ```bash
 $ ssh -i ~/.crc/machines/crc/id_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 core@127.0.0.1
 ```
