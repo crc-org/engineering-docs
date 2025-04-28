@@ -14,7 +14,6 @@ CRC Engineering docs
   - [macOS code signing](macOS-code-signing.md)
   - [Windows installation process](Windows-installation.md)
 - [Networking]()
-  - [Track TCP proxy connections](Using-tcpconnect-to-track-TCP-proxy-connections.md)
   - [User-mode network stack](Usermode-networking-stack.md)
   - [Blocking traffic with nwfilter](Blocking-traffic-with-nwfilter.md)
   - [Using tcpconnect to track TCP proxy connections](Using-tcpconnect-to-track-TCP-proxy-connections.md)
