@@ -26,7 +26,7 @@ For example, it is easy to use `.` to start the GitHub Web Editor to read and ed
 To create the HTML output, you can use:
 
 ```
-$ podman run --rm -v $PWD:/workspace quay.io/crc-org/mdbook:0.4.43 build
+$ podman run --rm -v $PWD:/workspace ghcr.io/crc-org/mdbook:latest build
 ```
 
 This will create a `book` folder that contains the output for a static webpage like GitHub Pages.

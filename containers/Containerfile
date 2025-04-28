@@ -1,14 +1,14 @@
-FROM registry.fedoraproject.org/fedora:40 AS builder
+FROM registry.access.redhat.com/ubi9:latest AS builder
 
 
 RUN dnf install -y cargo openssl-devel \
-    && cargo install mdbook \
+    && cargo install mdbook --locked \
     && cargo install mdbook-callouts \
     && cargo install mdbook-mermaid \
-    && cargo install mdbook-kroki-preprocessor
+    && cargo install mdbook-kroki-preprocessor --locked
 
 
-FROM registry.fedoraproject.org/fedora:40 
+FROM registry.access.redhat.com/ubi9:latest
 
 COPY --from=builder /root/.cargo/bin/mdbook /usr/bin
 COPY --from=builder /root/.cargo/bin/mdbook-callouts /usr/bin
