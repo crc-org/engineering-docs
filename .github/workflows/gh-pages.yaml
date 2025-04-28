@@ -1,9 +1,12 @@
 name: Build and publish docs
+
 on:
   push:
     branches:
       - "main"
   pull_request: {}
+  workflow_dispatch:
+  
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -15,8 +18,10 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+        
       - name: Build docs
-        run: podman run --rm -v $PWD:/workspace quay.io/crc-org/mdbook:0.4.43 build
+        run: podman run --rm -v $PWD:/workspace ghcr.io/crc-org/mdbook:latest build
+        
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         if: github.ref == 'refs/heads/main'
