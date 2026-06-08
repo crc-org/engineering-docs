@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Using tcpconnect to track TCP proxy connections - CRC Engineering docs</title>
+        <title>Accessing cluster on same LAN - CRC Engineering docs</title>
 
 
         <!-- Custom HTML head -->
@@ -392,53 +392,52 @@
   --color-pink: #d53984;
 }
 </style>
-<h1 id="track-tcp-proxy-connections"><a class="header" href="#track-tcp-proxy-connections">Track TCP proxy connections</a></h1>
-<p>Create an image with this</p>
-<p><code>Containerfile</code></p>
-<pre><code class="language-Dockerfile">FROM docker.io/library/centos:latest
-
-RUN dnf install -y \
-    bcc-tools \
-    http://download.eng.bos.redhat.com/brewroot/vol/rhel-8/packages/kernel/4.18.0/147.3.1.el8_1/x86_64/kernel-devel-4.18.0-147.3.1.el8_1.x86_64.rpm \
-    http://download.eng.bos.redhat.com/brewroot/vol/rhel-8/packages/kernel/4.18.0/147.3.1.el8_1/x86_64/kernel-headers-4.18.0-147.3.1.el8_1.x86_64.rpm \
-    &amp;&amp; dnf clean all \
-    &amp;&amp; rm -rf /var/cache/yum
-
-ENTRYPOINT ["/usr/share/bcc/tools/tcpconnect"]
+<h1 id="accessing-the-crc-cluster-from-the-same-lan"><a class="header" href="#accessing-the-crc-cluster-from-the-same-lan">Accessing the CRC cluster from the same LAN</a></h1>
+<p>Prerequisites: CRC running on a Linux machine, another machine on the same LAN wanting to access it.</p>
+<h2 id="1-on-the-crc-host--open-firewall-ports"><a class="header" href="#1-on-the-crc-host--open-firewall-ports">1. On the CRC host — open firewall ports</a></h2>
+<pre><code class="language-bash">sudo firewall-cmd --add-port=80/tcp --add-port=443/tcp --add-port=6443/tcp --permanent
+sudo firewall-cmd --reload
 </code></pre>
-<div class="mdbook-callouts mdbook-callouts-note">
-<p class="mdbook-callouts-title">
-  <span class="mdbook-callouts-icon"></span>
-  note
-</p>
-<p>The <code>kernel-devel</code> and <code>kernel-headers</code> versions must exactly match the one used by the CRC bundle</p>
-</div>
-<p>Image creation and publishing</p>
-<pre><code class="language-bash">$ podman build -t bcc-tcpconnect -f Containerfile .
-$ podman push localhost/bcc-tcpconnect quay.io/teuf/experiments:147.3.1.el8_1
+<h2 id="2-on-the-crc-host--forward-the-api-port"><a class="header" href="#2-on-the-crc-host--forward-the-api-port">2. On the CRC host — forward the API port</a></h2>
+<p>CRC exposes ports 80 and 443 on all interfaces, but the API server (6443) only listens on localhost. Create a socat forward:</p>
+<p>Replace <code>YOUR_LAN_IP</code> with the CRC host's LAN IP (e.g. <code>192.168.1.6</code>).</p>
+<pre><code class="language-bash">sudo dnf install -y socat
 </code></pre>
-<div class="mdbook-callouts mdbook-callouts-note">
-<p class="mdbook-callouts-title">
-  <span class="mdbook-callouts-icon"></span>
-  note
-</p>
-<p>The image is published to ensure the VM is able to download the image</p>
-</div>
-<p>Then after running <code>crc start</code>, you can run (possibly as soon as <code>ssh</code> is up in the VM):</p>
-<pre><code class="language-bash">$ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.crc/machines/crc/id_rsa core@192.168.130.11 \
-    sudo podman run --privileged -v /lib/modules:/lib/modules:ro \
-    quay.io/teuf/experiments:4.18.0-147.3.1.el8_1
+<pre><code class="language-bash">cat &lt;&lt;'EOF' | sudo tee /etc/systemd/system/crc-api-forward.service
+[Unit]
+Description=Forward CRC API port (6443) to LAN
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/socat TCP-LISTEN:6443,bind=YOUR_LAN_IP,fork,reuseaddr TCP:127.0.0.1:6443
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+</code></pre>
+<pre><code class="language-bash">sudo systemctl daemon-reload
+sudo systemctl enable --now crc-api-forward
+</code></pre>
+<h2 id="3-on-the-client-machine--update-etchosts"><a class="header" href="#3-on-the-client-machine--update-etchosts">3. On the client machine — update /etc/hosts</a></h2>
+<pre><code class="language-text">YOUR_LAN_IP api.crc.testing console-openshift-console.apps-crc.testing oauth-openshift.apps-crc.testing downloads-openshift-console.apps-crc.testing
+canary-openshift-ingress-canary.apps-crc.testing default-route-openshift-image-registry.apps-crc.testing
+</code></pre>
+<h2 id="4-verify"><a class="header" href="#4-verify">4. Verify</a></h2>
+<p>Replace <code>&lt;password&gt;</code> with the kubeadmin password shown during <code>crc start</code> or obtain it via <code>crc console --credentials</code>.</p>
+<pre><code class="language-bash">oc login https://api.crc.testing:6443 -u kubeadmin -p &lt;password&gt;
+oc get nodes
 </code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="Blocking-traffic-with-nwfilter.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="Using-tcpconnect-to-track-TCP-proxy-connections.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="Accessing-cluster-on-same-LAN.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="Nested-virtualization-setup.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -448,11 +447,11 @@ $ podman push localhost/bcc-tcpconnect quay.io/teuf/experiments:147.3.1.el8_1
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="Blocking-traffic-with-nwfilter.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="Using-tcpconnect-to-track-TCP-proxy-connections.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="Accessing-cluster-on-same-LAN.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="Nested-virtualization-setup.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
