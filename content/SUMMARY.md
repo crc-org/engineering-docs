@@ -17,6 +17,7 @@ CRC Engineering docs
   - [User-mode network stack](Usermode-networking-stack.md)
   - [Blocking traffic with nwfilter](Blocking-traffic-with-nwfilter.md)
   - [Using tcpconnect to track TCP proxy connections](Using-tcpconnect-to-track-TCP-proxy-connections.md)
+  - [Accessing cluster on same LAN](Accessing-cluster-on-same-LAN.md)
 - [Virtualization]()
   - [Nested virtualization setup](Nested-virtualization-setup.md)
   - [Apple Silicon support](Apple-Silicon-Support.md)
